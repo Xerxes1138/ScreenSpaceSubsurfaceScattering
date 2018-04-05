@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 20000011445436672}
   - component: {fileID: 124000013591392306}
   - component: {fileID: 81000012533405984}
-  - component: {fileID: 114326899153136946}
   - component: {fileID: 114605184832512786}
-  - component: {fileID: 114963033390000644}
+  - component: {fileID: 114867073153504136}
+  - component: {fileID: 114326899153136946}
   m_Layer: 0
   m_Name: pref_CameraRig
   m_TagString: MainCamera
@@ -27,8 +27,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 170126}
-  m_LocalRotation: {x: 0.14537191, y: 0.8498362, z: -0.30597973, w: 0.40375978}
-  m_LocalPosition: {x: -1.4118695, y: 2.326218, z: 2.5989764}
+  m_LocalRotation: {x: 0.15949433, y: 0.13744861, z: -0.022430867, w: 0.9773261}
+  m_LocalPosition: {x: -2.487234, y: 1.4952819, z: -3.6936994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,7 +63,7 @@ Camera:
     height: 1
   near clip plane: 0.03
   far clip plane: 1000
-  field of view: 35
+  field of view: 24.2
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableInputCapture: 1
-  holdRightMouseCapture: 0
+  holdRightMouseCapture: 1
   lookSpeed: 5
   moveSpeed: 5
   sprintSpeed: 50
@@ -114,8 +114,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c81e7011d53b4a4bb5b5bd7e1a94e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sreenSpaceSubSurfaceScatteringProfile: {fileID: 0}
---- !u!114 &114963033390000644
+  sreenSpaceSubSurfaceScatteringProfile: {fileID: 11400000, guid: 09765047eafcf2247aff7106e1c8fc1c,
+    type: 2}
+--- !u!114 &114867073153504136
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -126,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: ca20bf5439bec9048a6a75313d6dff24, type: 2}
+  profile: {fileID: 11400000, guid: 888d15787a5070241b6ece68de13caf0, type: 2}
 --- !u!124 &124000013591392306
 Behaviour:
   m_ObjectHideFlags: 1
