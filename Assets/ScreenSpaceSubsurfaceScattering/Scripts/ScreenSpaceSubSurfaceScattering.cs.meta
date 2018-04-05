@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2c81e7011d53b4a4bb5b5bd7e1a94e3d
+timeCreated: 1522918541
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - sreenSpaceSubSurfaceScatteringProfile: {fileID: 11400000, guid: 09765047eafcf2247aff7106e1c8fc1c,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
