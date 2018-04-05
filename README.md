@@ -11,6 +11,7 @@
 # Limitations
 - Deferred shading only
 - Surface shaders only (existing surface shader need to be updated, see SurfaceShaderSSSTemplate.shader and  SurfaceShaderTemplate.shader as guide)
+- Not working with ambient occlusion and screen space reflection from post processing stack
 
 # Requirements
 
