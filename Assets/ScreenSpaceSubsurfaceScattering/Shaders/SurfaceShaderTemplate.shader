@@ -21,7 +21,7 @@
 //SOFTWARE.
 //
 
-Shader "Xerxes1138/Surface Shader" 
+Shader "Xerxes1138/Templates/Surface Shader" 
 {
 	Properties 
 	{

@@ -19,6 +19,15 @@
 #include "../SSSSUtils.cginc"
 #include "../SSSSBRDF.cginc"
 
+// SSS
+sampler2D	_SSSTex; // RGB = SSS color, A = SSS radius
+sampler2D	_TransmittanceTex; // B = Transmittance
+
+half4		_SSSColor;
+half		_SSSRadius;
+half		_Transmittance;
+half		_TransmittanceExp;
+
 //-------------------------------------------------------------------------------------
 // counterpart for NormalizePerPixelNormal
 // skips normalization per-vertex and expects normalization to happen per-pixel
@@ -182,6 +191,9 @@ struct FragmentCommonData
     half alpha;
     float3 posWorld;
 
+	half4 subSurfaceScatteringColorAndRadius;
+	half transmittance;
+
 #if UNITY_STANDARD_SIMPLE
     half3 reflUVW;
 #endif
@@ -202,13 +214,22 @@ inline FragmentCommonData SpecularSetup (float4 i_tex)
     half smoothness = specGloss.a;
 
     half oneMinusReflectivity;
+
     half3 diffColor = EnergyConservationBetweenDiffuseAndSpecular (Albedo(i_tex), specColor, /*out*/ oneMinusReflectivity);
+
+	half4 sssColorAndRadius = tex2D(_SSSTex, i_tex.xy);
+	sssColorAndRadius.rgb *= _SSSColor.rgb;
+	sssColorAndRadius.a *= _SSSRadius;
+
+	half transmittance = pow(sqrt(tex2D(_TransmittanceTex, i_tex.xy).b) * _Transmittance, _TransmittanceExp);
 
     FragmentCommonData o = (FragmentCommonData)0;
     o.diffColor = diffColor;
     o.specColor = specColor;
     o.oneMinusReflectivity = oneMinusReflectivity;
     o.smoothness = smoothness;
+	o.subSurfaceScatteringColorAndRadius = sssColorAndRadius;
+	o.transmittance = transmittance;
     return o;
 }
 
@@ -222,11 +243,19 @@ inline FragmentCommonData RoughnessSetup(float4 i_tex)
     half3 specColor;
     half3 diffColor = DiffuseAndSpecularFromMetallic(Albedo(i_tex), metallic, /*out*/ specColor, /*out*/ oneMinusReflectivity);
 
+	half4 sssColorAndRadius = tex2D(_SSSTex, i_tex.xy);
+	sssColorAndRadius.rgb *= _SSSColor.rgb;
+	sssColorAndRadius.a *= _SSSRadius;
+
+	half transmittance = pow(sqrt(tex2D(_TransmittanceTex, i_tex.xy).b) * _Transmittance, _TransmittanceExp) * (1.0f - metallic);
+
     FragmentCommonData o = (FragmentCommonData)0;
     o.diffColor = diffColor;
     o.specColor = specColor;
     o.oneMinusReflectivity = oneMinusReflectivity;
     o.smoothness = smoothness;
+	o.subSurfaceScatteringColorAndRadius = sssColorAndRadius;
+	o.transmittance = transmittance;
     return o;
 }
 
@@ -240,11 +269,19 @@ inline FragmentCommonData MetallicSetup (float4 i_tex)
     half3 specColor;
     half3 diffColor = DiffuseAndSpecularFromMetallic (Albedo(i_tex), metallic, /*out*/ specColor, /*out*/ oneMinusReflectivity);
 
+	half4 sssColorAndRadius = tex2D(_SSSTex, i_tex.xy);
+	sssColorAndRadius.rgb *= _SSSColor.rgb;
+	sssColorAndRadius.a *= _SSSRadius;
+
+	half transmittance = pow(sqrt(tex2D(_TransmittanceTex, i_tex.xy).b) * _Transmittance, _TransmittanceExp) * (1.0f - metallic);
+
     FragmentCommonData o = (FragmentCommonData)0;
     o.diffColor = diffColor;
     o.specColor = specColor;
     o.oneMinusReflectivity = oneMinusReflectivity;
     o.smoothness = smoothness;
+	o.subSurfaceScatteringColorAndRadius = sssColorAndRadius;
+	o.transmittance = transmittance;
     return o;
 }
 
@@ -561,6 +598,8 @@ struct VertexOutputDeferred
         float3 posWorld                     : TEXCOORD6;
     #endif
 
+		float4 screenPos					: TEXCOORD8;
+
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
@@ -618,6 +657,9 @@ VertexOutputDeferred vertDeferred (VertexInput v)
         o.tangentToWorldAndPackedData[2].w = viewDirForParallax.z;
     #endif
 
+		o.screenPos = ComputeScreenPos(o.pos);
+			COMPUTE_EYEDEPTH(o.screenPos.z);
+
     return o;
 }
 
@@ -671,13 +713,40 @@ void fragDeferred (
         emissiveColor.rgb = exp2(-emissiveColor.rgb);
     #endif
 
+	float2 screenUV = i.screenPos.xy / i.screenPos.w;
+
+	int2 pos = screenUV * _ScreenParams.xy;
+
+	bool interleaved = GetPattern(pos);
+
 	GBufferData data;
-	data.shadingModel = EncodeShadingModel(SHADING_MODEL_STANDARD);
-    data.diffColorAndCustomData = s.diffColor;
-    data.occlusion      = occlusion;
-    data.specColorAndCustomData = s.specColor;
-    data.smoothness     = s.smoothness;
-    data.normalAndCustomData = EncodeUnityNormal(s.normalWorld);
+	#ifdef _MATERIAL_MODEL_SSS
+		data.shadingModel			= EncodeShadingModel(SHADING_MODEL_SSS);
+	#else
+		data.shadingModel			= EncodeShadingModel(SHADING_MODEL_STANDARD);
+	#endif
+
+	#ifdef _MATERIAL_MODEL_SSS
+		data.diffColorAndCustomData = EncodeDiffColorAndTransmittance(interleaved, s.diffColor, s.transmittance);
+	#else
+		data.diffColorAndCustomData = s.diffColor;
+	#endif
+
+    data.occlusion					= occlusion;
+
+	#ifdef _MATERIAL_MODEL_SSS
+		data.specColorAndCustomData = EncodeSpecColorAndSSSColor(interleaved, s.specColor, s.subSurfaceScatteringColorAndRadius.rgb);
+	#else
+		data.specColorAndCustomData = s.specColor;
+	#endif
+
+    data.smoothness					= s.smoothness;
+
+	#ifdef _MATERIAL_MODEL_SSS
+		data.normalAndCustomData	= EncodeNormalAndSSSRadius(s.normalWorld, s.subSurfaceScatteringColorAndRadius.a);
+	#else
+		data.normalAndCustomData	= EncodeUnityNormal(s.normalWorld);
+	#endif
 
 	StandardSSSSDataToGbuffer(data, outGBuffer0, outGBuffer1, outGBuffer2);
 

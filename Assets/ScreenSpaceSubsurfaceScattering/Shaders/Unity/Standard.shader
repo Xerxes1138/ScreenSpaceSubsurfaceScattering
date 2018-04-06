@@ -28,6 +28,18 @@ Shader "Standard"
 		_OcclusionStrength("Strength", Range(0.0, 1.0)) = 1.0
 		_OcclusionMap("Occlusion", 2D) = "white" {}
 
+		_ShadingModel("ShadingModel", Float) = 0.0
+
+		// SSS
+		_SSSTex("SSS Color (RGB), SSS Radius (A)", 2D) = "white" {}
+		_SSSColor("Color", Color) = (1.0, 0.3, 0.3,1)
+		_SSSRadius("Radius", Range(0.0, 1.0)) = 0.5
+
+		// Transmittance
+		_TransmittanceTex("Thickness", 2D) = "white" {}
+		_TransmittanceExp("Exponent", Range(1.0, 8.0)) = 1.0
+		_Transmittance("Scale", Range(0.0, 1.0)) = 1.0
+		
 		_EmissionColor("Color", Color) = (0,0,0)
 		_EmissionMap("Emission", 2D) = "white" {}
 		
@@ -175,6 +187,8 @@ Shader "Standard"
 			#pragma shader_feature _ _SPECULARHIGHLIGHTS_OFF
 			#pragma shader_feature ___ _DETAIL_MULX2
 			#pragma shader_feature _PARALLAXMAP
+
+			#pragma shader_feature _MATERIAL_MODEL_STANDARD _MATERIAL_MODEL_SSS
 
 			#pragma multi_compile_prepassfinal
 			#pragma multi_compile_instancing
