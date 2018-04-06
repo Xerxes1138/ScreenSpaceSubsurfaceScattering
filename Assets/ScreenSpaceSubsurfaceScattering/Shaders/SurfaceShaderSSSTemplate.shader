@@ -21,7 +21,7 @@
 //SOFTWARE.
 //
 
-Shader "Xerxes1138/Templates/Surface Shader SSS" 
+Shader "Xerxes1138/Surface Shader Templates/Subsurface Scattering" 
 {
 	Properties 
 	{
@@ -86,7 +86,7 @@ Shader "Xerxes1138/Templates/Surface Shader SSS"
         struct Input 
 		{
             float2 uv_MainTex;
-            float4 screenPos; // screenPos is required in order to pass the interleaved pattern
+            float4 screenPos; // screenPos is required for the interleaved pattern
         };
 
 		void surf (Input IN, inout SurfaceOutputStandardSSSS o) 

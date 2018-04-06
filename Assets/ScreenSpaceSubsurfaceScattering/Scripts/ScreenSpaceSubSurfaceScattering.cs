@@ -191,6 +191,9 @@ public class ScreenSpaceSubSurfaceScattering : MonoBehaviour
             case DebugPass.ShadingModel:
                 rendererMaterial.SetFloat(Uniforms._DebugPass, 6);
                 break;
+            case DebugPass.Fade:
+                rendererMaterial.SetFloat(Uniforms._DebugPass, 7);
+                break;
         }
     }
 
@@ -377,6 +380,7 @@ public class ScreenSpaceSubSurfaceScattering : MonoBehaviour
                 case DebugPass.Combine:
                     Graphics.Blit(source, destination, rendererMaterial, 0);
                     break;
+                case DebugPass.Fade:
                 case DebugPass.ShadingModel:
                 case DebugPass.SSSColor:
                 case DebugPass.Specular:
@@ -398,6 +402,7 @@ public class ScreenSpaceSubSurfaceScattering : MonoBehaviour
                 case DebugPass.Combine:
                     Graphics.Blit(source, destination, rendererMaterial, 0);
                     break;
+                case DebugPass.Fade:
                 case DebugPass.ShadingModel:
                 case DebugPass.SSSColor:
                 case DebugPass.Specular:

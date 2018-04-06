@@ -710,7 +710,6 @@ void fragDeferred (
     UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, dummyLight, sampleReflectionsInDeferred);
 
     half3 emissiveColor = 0.0f;
-
 	#ifdef _MATERIAL_MODEL_SSS
 		emissiveColor = SeparableSubSurfaceShading(s.transmittance, s.subSurfaceScatteringColorAndRadius.rgb, half3(1.0f, 1.0f, 1.0f), s.specColor, s.smoothness, s.oneMinusReflectivity, s.normalWorld, gi.light.dir, gi.light.color, -s.eyeVec, interleaved).rgb;
 		emissiveColor += SeparableSubSurfaceGI(gi.indirect, half3(1.0f, 1.0f, 1.0f), s.specColor, s.smoothness, s.oneMinusReflectivity, s.normalWorld, -s.eyeVec, interleaved).rgb;
@@ -727,8 +726,6 @@ void fragDeferred (
     #ifndef UNITY_HDR_ON
         emissiveColor.rgb = exp2(-emissiveColor.rgb);
     #endif
-
-
 
 	GBufferData data;
 	#ifdef _MATERIAL_MODEL_SSS

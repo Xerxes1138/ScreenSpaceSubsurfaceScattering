@@ -42,6 +42,7 @@ public enum DebugPass
     Specular,
     SSSColor,
     ShadingModel,
+    Fade
 };
 
 [System.Serializable]

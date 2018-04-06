@@ -17,5 +17,5 @@ MonoBehaviour:
   sampleQuality: 9
   temporalJitter: 1
   worldUnit: 1
-  fadeDistance: 10
+  fadeDistance: 4
   fadeRadius: 1

@@ -73,9 +73,9 @@ Shader "Hidden/Xerxes1138/ScreenSpaceSubsurfaceScattering"
 	float SampleRawDepth (float2 uv)
 	{
 		float z = SampleColor(_CameraDepthTexture, uv);
-		#if defined(UNITY_REVERSED_Z)
+		/*#if defined(UNITY_REVERSED_Z)
 			z = 1.0f - z;
-		#endif
+		#endif*/
 		return z;
 	}
 	
@@ -409,7 +409,11 @@ Shader "Hidden/Xerxes1138/ScreenSpaceSubsurfaceScattering"
 	{	
 		SURFACE_SETUP(s)
 
-		half2 uv = i.uv;
+		float2 uv = i.uv;
+
+		float depth = SampleRawDepth(uv);
+		float3 screenPos = float3(uv, depth);
+		float3 worldPos = ScreenToWorldSpace(screenPos);
 
 		half4 sceneColor = SampleColor(_MainTex, uv); 
 		half4 specular = SampleColor(_SpecularTex, uv);
@@ -436,6 +440,13 @@ Shader "Hidden/Xerxes1138/ScreenSpaceSubsurfaceScattering"
 				sceneColor.rgb = half4(0.0f, 1.0f, 0.0f, 1.0f);
 			else
 				sceneColor.rgb = half4(0.0f, 0.0f, 1.0f, 1.0f);
+		}
+		else if (_DebugPass == 7)
+		{
+			float len = length(_WorldSpaceCameraPos - worldPos);
+			float fade = saturate((len - _FadeDistanceAndRadius.x) / _FadeDistanceAndRadius.y);
+
+			sceneColor.rgb = 1.0f - fade;
 		}
 
 		return half4(sceneColor.rgb, 1.0);
