@@ -38,7 +38,7 @@ namespace UnityEditor
         {
             public static GUIContent uvSetLabel = new GUIContent("UV Set");
 
-            public static GUIContent albedoText = new GUIContent("Albedo PROUT", "Albedo (RGB) and Transparency (A)");
+            public static GUIContent albedoText = new GUIContent("Albedo", "Albedo (RGB) and Transparency (A)");
             public static GUIContent alphaCutoffText = new GUIContent("Alpha Cutoff", "Threshold for alpha cutoff");
             public static GUIContent specularMapText = new GUIContent("Specular", "Specular (RGB) and Smoothness (A)");
             public static GUIContent metallicMapText = new GUIContent("Metallic", "Metallic (R) and Smoothness (A)");
