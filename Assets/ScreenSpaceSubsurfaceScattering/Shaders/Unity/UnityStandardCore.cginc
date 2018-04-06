@@ -701,23 +701,34 @@ void fragDeferred (
     bool sampleReflectionsInDeferred = true;
 #endif
 
-    UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, dummyLight, sampleReflectionsInDeferred);
-
-    half3 emissiveColor = UNITY_BRDF_PBS (s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect).rgb;
-
-    #ifdef _EMISSION
-        emissiveColor += Emission (i.tex.xy);
-    #endif
-
-    #ifndef UNITY_HDR_ON
-        emissiveColor.rgb = exp2(-emissiveColor.rgb);
-    #endif
-
 	float2 screenUV = i.screenPos.xy / i.screenPos.w;
 
 	int2 pos = screenUV * _ScreenParams.xy;
 
 	bool interleaved = GetPattern(pos);
+
+    UnityGI gi = FragmentGI (s, occlusion, i.ambientOrLightmapUV, atten, dummyLight, sampleReflectionsInDeferred);
+
+    half3 emissiveColor = 0.0f;
+
+	#ifdef _MATERIAL_MODEL_SSS
+		emissiveColor = SeparableSubSurfaceShading(s.transmittance, s.subSurfaceScatteringColorAndRadius.rgb, half3(1.0f, 1.0f, 1.0f), s.specColor, s.smoothness, s.oneMinusReflectivity, s.normalWorld, gi.light.dir, gi.light.color, -s.eyeVec, interleaved).rgb;
+		emissiveColor += SeparableSubSurfaceGI(gi.indirect, half3(1.0f, 1.0f, 1.0f), s.specColor, s.smoothness, s.oneMinusReflectivity, s.normalWorld, -s.eyeVec, interleaved).rgb;
+	#else
+		emissiveColor = UNITY_BRDF_PBS(s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect).rgb;
+	#endif
+
+	#ifdef _MATERIAL_MODEL_SSS
+		emissiveColor = half4((interleaved) ? Emission(i.tex.xy) + emissiveColor : 0.0f, 1.0f);
+	#else
+		emissiveColor = half4(Emission(i.tex.xy) + emissiveColor.rgb, 1.0f);
+	#endif
+
+    #ifndef UNITY_HDR_ON
+        emissiveColor.rgb = exp2(-emissiveColor.rgb);
+    #endif
+
+
 
 	GBufferData data;
 	#ifdef _MATERIAL_MODEL_SSS
