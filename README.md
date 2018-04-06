@@ -10,7 +10,6 @@
 
 # Limitations
 - Deferred shading only
-- Surface shaders only (existing surface shader need to be updated, see SurfaceShaderSSSTemplate.shader and  SurfaceShaderTemplate.shader as guide)
 - Not working with ambient occlusion and screen space reflection from post processing stack
 
 # Requirements
@@ -24,6 +23,8 @@ Set project in Linear Color space and make sure that under ProjectSettings/Graph
 ![GraphicsSettings](https://raw.githubusercontent.com/Xerxes1138/ScreenSpaceSubsurfaceScattering/master/GraphicsSettings.png)
 
 See pref_camerarig for reference on how to setup ScreenSpaceSubSurfaceScattering.cs on your camera (should always be the first effect to be used)
+
+Existing surface shader need to be updated, see SurfaceShaderSSSTemplate.shader and  SurfaceShaderTemplate.shader as guide
 
 # References
 - [Jimenez et al. 2011] "https://github.com/iryoku/separable-sss"
