@@ -208,7 +208,7 @@ Shader "Hidden/Xerxes1138/ScreenSpaceSubsurfaceScattering"
 
 		half4 gbuffer0, gbuffer1, gbuffer2;
 		SampleGBuffer(i_uv, gbuffer0, gbuffer1, gbuffer2);
-		GBufferData data = SSSSDataFromGbuffer(gbuffer0, gbuffer1, gbuffer2);
+		GBufferData data = StandardSSSSDataFromGbuffer(gbuffer0, gbuffer1, gbuffer2);
 
 		bool pattern = GetPattern (pos);
 		int shadingModel = DecodeShadingModel(data.shadingModel);
@@ -304,7 +304,7 @@ Shader "Hidden/Xerxes1138/ScreenSpaceSubsurfaceScattering"
 
 		half4 gbuffer0, gbuffer1, gbuffer2;
 		SampleGBuffer(uv, gbuffer0, gbuffer1, gbuffer2);
-		GBufferData data = SSSSDataFromGbuffer(gbuffer0, gbuffer1, gbuffer2);
+		GBufferData data = StandardSSSSDataFromGbuffer(gbuffer0, gbuffer1, gbuffer2);
 
 		bool pattern = GetPattern (pos);
 		int shadingModel = DecodeShadingModel(data.shadingModel);
@@ -419,7 +419,7 @@ Shader "Hidden/Xerxes1138/ScreenSpaceSubsurfaceScattering"
 		if(_DebugPass == 0)
 			sceneColor.rgb = 0.0;
 		else if(_DebugPass == 1)
-			sceneColor.rgb = lerp(0.0, diffuseSSS, s.sssMask);
+			sceneColor.rgb = lerp(diffuse.rgb, diffuseSSS.rgb, s.sssMask);
 		else if(_DebugPass == 2)
 			sceneColor.rgb = lerp(0.0, specular, s.sssMask);
 		else if(_DebugPass == 3)
