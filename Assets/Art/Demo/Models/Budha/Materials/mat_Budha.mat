@@ -7,8 +7,8 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: mat_Budha
-  m_Shader: {fileID: 4800000, guid: a0c092be561f951409d81577e49d78da, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 1c86cd3a36e705d43b4574f72a26ced1, type: 3}
+  m_ShaderKeywords: _MATERIAL_MODEL_STANDARD _METALLICGLOSSMAP _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -76,6 +76,7 @@ Material:
     - _Parallax: 0.02
     - _SSSLerp: 0
     - _SSSRadius: 0.221
+    - _ShadingModel: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

@@ -3,14 +3,15 @@
 ![SSSS](https://raw.githubusercontent.com/Xerxes1138/ScreenSpaceSubsurfaceScattering/master/SSS.png)
 
 # Features
-- SSS (SubSurfaceScattering) blur is performed in screen space
-- SSS color attenuation can be defined by a color or a texture
-- Transmittance (based on the SSS color/texture)
-- Can be used on all surfaces (snow for example)
+- SubSurface Scattering (SSS) blur is performed in screen space
+- SSS attenuation can be defined by a color or a texture
+- Transmittance
+- Not limited to skin
 
 # Limitations
 - Deferred shading only
-- Not working with ambient occlusion and screen space reflection from post processing stack
+- Terrain is not supported
+- Ambient occlusion and screen space reflection from post processing stack are not supported
 
 # Requirements
 
@@ -22,7 +23,7 @@ Set project in Linear Color space and make sure that under ProjectSettings/Graph
 
 ![GraphicsSettings](https://raw.githubusercontent.com/Xerxes1138/ScreenSpaceSubsurfaceScattering/master/GraphicsSettings.png)
 
-See pref_camerarig for reference on how to setup ScreenSpaceSubSurfaceScattering.cs on your camera (should always be the first effect to be used)
+See pref_CameraRig for reference on how to setup ScreenSpaceSubSurfaceScattering.cs on your camera (should always be the first effect to be used)
 
 Existing surface shader need to be updated, see SurfaceShaderSSSTemplate.shader and  SurfaceShaderTemplate.shader as guide
 

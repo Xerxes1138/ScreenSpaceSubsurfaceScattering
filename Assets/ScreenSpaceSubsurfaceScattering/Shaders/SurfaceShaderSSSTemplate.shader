@@ -75,7 +75,7 @@ Shader "Xerxes1138/Surface Shader Templates/Subsurface Scattering"
 		half _SSSRadius;
 		half _Transmittance;
 		half _TransmittanceExp;
-					
+
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
 		// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
 		// #pragma instancing_options assumeuniformscaling
